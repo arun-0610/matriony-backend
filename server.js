@@ -9,17 +9,19 @@ app.use(bodyParser);
 require('dotenv').config();
 const PORT = process.env.PORT || 4000;
 
-const corsOptions = {
-  origin: ['https://matrimony-sengunthar.netlify.app'],
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization'],
-};
-
-// CORS for all routes
-app.use(cors(corsOptions));
-
-// Handle preflight
-app.options('*', cors(corsOptions));
+// Put this at the top, before routes
+app.use((req, res, next) => {
+  // allow only your frontend origin (recommended), or '*' for quick test
+  res.header('Access-Control-Allow-Origin', 'https://matrimony-sengunthar.netlify.app');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  // If your frontend sends cookies or Authorization with credentials:
+  // res.header('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 app.get("/", (req, res)=>{
   res.send("Server is running");
