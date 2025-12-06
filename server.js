@@ -9,11 +9,17 @@ app.use(bodyParser);
 require('dotenv').config();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors({
+const corsOptions = {
   origin: ['https://matrimony-sengunthar.netlify.app'],
   methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization']
-}));
+  allowedHeaders: ['Content-Type','Authorization'],
+};
+
+// CORS for all routes
+app.use(cors(corsOptions));
+
+// Handle preflight
+app.options('*', cors(corsOptions));
 
 app.get("/", (req, res)=>{
   res.send("Server is running");
