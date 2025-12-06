@@ -8,7 +8,8 @@ const cors = require('cors');
 // Put this at the top of server.js, before any other app.use() or routes:
 const allowedOrigins = new Set([
   'https://matrimony-sengunthar.netlify.app',
-  'http://127.0.0.1:5500'
+  'http://127.0.0.1:5500',
+  'https://matrimony-sengunthar.netlify.app/signup'
 ]);
 
 app.use((req, res, next) => {
