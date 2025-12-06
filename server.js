@@ -9,8 +9,7 @@ const cors = require('cors');
 const allowedOrigins = new Set([
   'https://matrimony-sengunthar.netlify.app',
   'http://127.0.0.1:5500',
-  'http://localhost:5500',
-  'http://localhost:3000'
+  'https://matrimony-sengunthar.netlify.app/signup'
 ]);
 
 app.use((req, res, next) => {
@@ -22,7 +21,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Credentials', 'true'); // only with explicit origin
   } else {
     // For development quick test you may allow all; avoid in production:
-    // res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     // DO NOT set credentials when using '*'
   }
 
@@ -43,7 +42,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 4000;
 
 app.get("/", (req, res)=>{
-  res.send("Server is running");
+  res.send("Server is running new");
 })
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
