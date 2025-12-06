@@ -4,24 +4,43 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 const cors = require('cors');
-const bodyParser = express.json();
-app.use(bodyParser);
-require('dotenv').config();
-const PORT = process.env.PORT || 4000;
 
-// Put this at the top, before routes
+// Put this at the top of server.js, before any other app.use() or routes:
+const allowedOrigins = new Set([
+  'https://matrimony-sengunthar.netlify.app',
+  'http://127.0.0.1:5500',
+  'http://localhost:5500',
+  'http://localhost:3000'
+]);
+
 app.use((req, res, next) => {
-  // allow only your frontend origin (recommended), or '*' for quick test
-  res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  // If your frontend sends cookies or Authorization with credentials:
-  res.header('Access-Control-Allow-Credentials', 'true');
+  const origin = req.headers.origin;
+  console.log('[CORS] incoming origin:', origin);
+
+  if (allowedOrigins.has(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin); // explicit origin
+    res.setHeader('Access-Control-Allow-Credentials', 'true'); // only with explicit origin
+  } else {
+    // For development quick test you may allow all; avoid in production:
+    // res.setHeader('Access-Control-Allow-Origin', '*');
+    // DO NOT set credentials when using '*'
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+
   if (req.method === 'OPTIONS') {
+    // Preflight: respond immediately
     return res.sendStatus(200);
   }
   next();
 });
+
+
+const bodyParser = express.json();
+app.use(bodyParser);
+require('dotenv').config();
+const PORT = process.env.PORT || 4000;
 
 app.get("/", (req, res)=>{
   res.send("Server is running");
