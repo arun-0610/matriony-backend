@@ -184,77 +184,75 @@ app.post('/api/auth/signup', upload.fields([
     const certPath = req.files && req.files['community_cert'] ? req.files['community_cert'][0].filename : null;
     const jathPath = req.files && req.files['jathagam'] ? req.files['jathagam'][0].filename : null;
     
-    // CORRECTED INSERT QUERY - exactly 46 columns and 46 values
-    const insertQuery = `
-      INSERT INTO users (
-        name, email, password, age, gender, dob, birth_time, birth_place,
-        religion, caste, sub_caste, gothram, star, rasi,
-        education, occupation, job_location, income,
-        height, weight, body_type, complexion, mother_tongue, disability,
-        father_occupation, mother_occupation, elder_brothers, younger_brothers,
-        elder_sisters, younger_sisters, family_details,
-        partner_education, partner_occupation, partner_income, partner_marital_status, partner_expectations,
-        phone, whatsapp, address, city, state, pincode, about, interests,
-        profile_photo, status, created_at, last_login
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 
-        $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
-        $21, $22, $23, $24, $25, $26, $27, $28, $29, $30,
-        $31, $32, $33, $34, $35, $36, $37, $38, $39, $40,
-        $41, $42, $43, $44, $45, $46, $47, $48
-      ) RETURNING id
-    `;
-    
-    const values = [
-      name || null,
-      email,
-      hashed,
-      age ? parseInt(age) : null,
-      gender || null,
-      dob || null,
-      birth_time || null,
-      birth_place || null,
-      religion || null,
-      caste || 'SENGUNTHAR',
-      sub_caste || null,
-      gothram || null,
-      star || null,
-      rasi || null,
-      education || null,
-      occupation || null,
-      job_location || null,
-      income || null,
-      height ? parseInt(height) : null,
-      weight ? parseInt(weight) : null,
-      body_type || null,
-      complexion || null,
-      mother_tongue || null,
-      disability || 'no',
-      father_occupation || null,
-      mother_occupation || null,
-      elder_brothers ? parseInt(elder_brothers) : 0,
-      younger_brothers ? parseInt(younger_brothers) : 0,
-      elder_sisters ? parseInt(elder_sisters) : 0,
-      younger_sisters ? parseInt(younger_sisters) : 0,
-      family_details || null,
-      partner_education || null,
-      partner_occupation || null,
-      partner_income || null,
-      partner_marital_status || 'unmarried',
-      partner_expectations || null,
-      phone || null,
-      whatsapp || null,
-      address || null,
-      city || null,
-      state || null,
-      pincode || null,
-      about || null,
-      interests || null,
-      profilePhoto,
-      'pending',
-      new Date(),
-      new Date()
-    ];
+   // CORRECTED INSERT QUERY - exactly 46 columns and 46 placeholders
+const insertQuery = `
+  INSERT INTO users (
+    name, email, password, age, gender, dob, birth_time, birth_place,
+    religion, caste, sub_caste, gothram, star, rasi,
+    education, occupation, job_location, income,
+    height, weight, body_type, complexion, mother_tongue, disability,
+    father_occupation, mother_occupation, elder_brothers, younger_brothers,
+    elder_sisters, younger_sisters, family_details,
+    partner_education, partner_occupation, partner_income, partner_marital_status, partner_expectations,
+    phone, whatsapp, address, city, state, pincode, about, interests,
+    profile_photo, status
+  ) VALUES (
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 
+    $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
+    $21, $22, $23, $24, $25, $26, $27, $28, $29, $30,
+    $31, $32, $33, $34, $35, $36, $37, $38, $39, $40,
+    $41, $42, $43, $44, $45, $46
+  ) RETURNING id
+`;
+
+const values = [
+  name || null,
+  email,
+  hashed,
+  age ? parseInt(age) : null,
+  gender || null,
+  dob || null,
+  birth_time || null,
+  birth_place || null,
+  religion || null,
+  caste || 'SENGUNTHAR',
+  sub_caste || null,
+  gothram || null,
+  star || null,
+  rasi || null,
+  education || null,
+  occupation || null,
+  job_location || null,
+  income || null,
+  height ? parseInt(height) : null,
+  weight ? parseInt(weight) : null,
+  body_type || null,
+  complexion || null,
+  mother_tongue || null,
+  disability || 'no',
+  father_occupation || null,
+  mother_occupation || null,
+  elder_brothers ? parseInt(elder_brothers) : 0,
+  younger_brothers ? parseInt(younger_brothers) : 0,
+  elder_sisters ? parseInt(elder_sisters) : 0,
+  younger_sisters ? parseInt(younger_sisters) : 0,
+  family_details || null,
+  partner_education || null,
+  partner_occupation || null,
+  partner_income || null,
+  partner_marital_status || 'unmarried',
+  partner_expectations || null,
+  phone || null,
+  whatsapp || null,
+  address || null,
+  city || null,
+  state || null,
+  pincode || null,
+  about || null,
+  interests || null,
+  profilePhoto,
+  'pending'
+];
     
     console.log('Inserting user with', values.length, 'values');
     const r = await pool.query(insertQuery, values);
