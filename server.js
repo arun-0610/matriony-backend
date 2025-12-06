@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 4000;
 // Put this at the top, before routes
 app.use((req, res, next) => {
   // allow only your frontend origin (recommended), or '*' for quick test
-  res.header('Access-Control-Allow-Origin', 'https://matrimony-sengunthar.netlify.app');
+  res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   // If your frontend sends cookies or Authorization with credentials:
